@@ -217,9 +217,12 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 # Redirect HTTP → HTTPS only when explicitly enabled via .env.
-# Set SECURE_SSL_REDIRECT=True in production (where real HTTPS exists).
-# Never set it locally — the dev server doesn't support HTTPS.
 SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "False") == "True"
+
+# Tell Django to trust Railway's (and other proxies') X-Forwarded-Proto header
+# so it correctly identifies requests as HTTPS even behind a load balancer.
+if os.getenv("SECURE_PROXY_SSL_HEADER"):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Session / CSRF cookies should only travel over HTTPS in production.
 # Default follows DEBUG (False in dev, True in prod), but can be overridden
