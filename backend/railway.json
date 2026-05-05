@@ -1,0 +1,10 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pip install -r requirements.txt && mkdir -p staticfiles && SECRET_KEY=build-phase-placeholder DJANGO_ALLOW_INSECURE_KEY=1 python manage.py collectstatic --noinput --clear"
+  },
+  "deploy": {
+    "startCommand": "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+  }
+}
